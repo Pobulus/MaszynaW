@@ -56,7 +56,7 @@ int main(int argc, char **argv) {
     vector<pair<string, string>> lines;
     map<string, int> insts;
     map<string, int> labels;
-    set<string> no_args = {"RPA", "RST"};
+    set<string> no_args = {"RPA"};
     ifstream inst_file("inst.dat");
     {//loading instructions
         int args, cnt=0;

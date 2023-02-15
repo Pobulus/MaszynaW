@@ -3,6 +3,7 @@
 #include <string>
 #include <string.h>
 #include <map>
+#include <set>
 #include <vector>
 
 bool readParameters ( int& argc, char** argv, std::string& in, std::string& out, int &inst, int &data ) {
@@ -54,16 +55,20 @@ int main(int argc, char **argv) {
     vector<pair<string, string>> lines;
     map<string, int> insts;
     map<string, int> labels;
+    set<string> no_args = {"RPA", "RST"};
+    ifstream inst_file("inst.dat");
+    {//loading instructions
+        int args, cnt=0;
+        string ins;
+        while(inst_file >> ins >> args){
+            insts[ins] = (cnt++)<<data_bits;
+            if(!args) no_args.insert(ins);
+        }
+    }
+    //built-in instructions
     insts["RST"] = 0<<data_bits;
     insts["RPA"] = 0<<data_bits;
-    insts["STP"] = 0<<data_bits;
-    insts["DOD"] = 1<<data_bits;
-    insts["ODE"] = 2<<data_bits;
-    insts["POB"] = 3<<data_bits;
-    insts["ŁAD"] = 4<<data_bits;
-    insts["SOB"] = 5<<data_bits;
-    insts["SOM"] = 6<<data_bits;
-    insts["SOZ"] = 7<<data_bits;
+
     if(input){
         int lc = 0;
         
@@ -79,7 +84,7 @@ int main(int argc, char **argv) {
                 }
                 if( insts.count(token)){ //token is an instruction
                     string attr;
-                    if(token == "RPA" or token == "STP") {
+                    if(no_args.count(token)) {
                         attr = "0";
                     }else{
                         if(!(input >> attr)){

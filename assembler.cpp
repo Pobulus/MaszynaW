@@ -1,19 +1,54 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <string.h>
 #include <map>
 #include <vector>
 
+bool readParameters ( int& argc, char** argv, std::string& in, std::string& out, int &inst, int &data ) {
+    bool errors = false;
+    for ( int i = 1; i < argc - 1; i++ ) {
+        if ( not strcmp ( argv[i], "-i" ) ) { //input file
+            in = argv[i + 1];
+        } else if ( not strcmp ( argv[i], "-o" ) ) { //output file
+            out = argv[i + 1];
+        } else if ( not strcmp ( argv[i], "-d" ) ) { //data bits
+            data = std::stoi(argv[i + 1]);
+        } else if ( not strcmp ( argv[i], "-c" ) ) { //command bits
+                inst = std::stoi(argv[i + 1]);
+        } else if ( not strcmp ( argv[i], "-h" ) ) { //help
+            errors = true;
+        }
+    }
+    if ( not strcmp ( argv[argc - 1], "-h" ) ) 
+            errors = true; //help
+    return errors;
+    
+}
+
 int main(int argc, char **argv) {
     using namespace std;
-    const int data_bits = 5;
-    const int inst_bits = 3;
+    int data_bits = 5;
+    int inst_bits = 3;
     string input_file_name;
     string output_file_name;
-    cout << "Input file name:"<<endl;;
-    cin >> input_file_name;
-    cout << "Output file name:"<<endl;
-    cin >> output_file_name;
+    if(readParameters(argc, argv, input_file_name, output_file_name, inst_bits, data_bits)){
+        cout << "You can use parameters:" << endl;
+        cout << "-i \t input file name" << endl;
+        cout << "-o \t output file name" << endl;
+        cout << "-d \t number of data bits (5)" << endl;
+        cout << "-c \t number of instruction bits (3)" << endl;
+        cout << "-h \t this help message" << endl;
+        return 0;
+    }
+    if(input_file_name==""){
+        cout << "Input file name:"<<endl;
+        cin >> input_file_name;
+    }
+    if(output_file_name==""){
+        cout << "Output file name:"<<endl;
+        cin >> output_file_name;
+    }
     ifstream  input(input_file_name);
     ofstream  output(output_file_name);
     vector<pair<string, string>> lines;
@@ -39,6 +74,9 @@ int main(int argc, char **argv) {
                 cout << "LABEL:"<<token<<endl;
                 labels[token.substr(0, pos)]=lc;
             }else{
+                for(auto &l : token){//ignore lowercase
+                    l = toupper(l);
+                }
                 if( insts.count(token)){ //token is an instruction
                     string attr;
                     if(token == "RPA" or token == "STP") {

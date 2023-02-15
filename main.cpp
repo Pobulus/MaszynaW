@@ -61,7 +61,6 @@ int main(int argc, char **argv) {
         for(auto l : labels){
             std::cout << l.first<< " -> " << l.second<<endl;
         }
-        cout << hex;
         for(auto &line : lines){
             if(labels.count(line.second)){
                 line.second = to_string(labels[line.second]);
@@ -72,9 +71,11 @@ int main(int argc, char **argv) {
             output << "v2.0 raw"<<endl;
             output << hex;
             for(auto line : lines){
-                output << (insts[line.first])+stoi(line.second) << " " <<endl;
+                output << (insts[line.first])+stoi(line.second) << " ";
             }
+            output << endl;
         }
+        
     }
     return 0;
 }

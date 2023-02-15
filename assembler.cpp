@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <string.h>
+#include <math.h>
 #include <map>
 #include <set>
 #include <vector>
@@ -63,6 +64,9 @@ int main(int argc, char **argv) {
         while(inst_file >> ins >> args){
             insts[ins] = (cnt++)<<data_bits;
             if(!args) no_args.insert(ins);
+        }
+        if(cnt > pow(2, inst_bits)){
+            cerr << "Warning: Not enough instruction bits. Program might behave unxepectedly"<<endl;
         }
     }
     //built-in instructions

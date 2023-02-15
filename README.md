@@ -25,7 +25,9 @@ Dostępne są następujące sygnały sterujące:
 - TAKT - przycisk ręczengo taktowania
 - RESET - przycisk do resetowania maszyny
 - SYGN - umożliwia ręczne wskazanie, które sygnały mają być aktywne 
+
 Symulator zawiera wyjścia pokazujące aktualne stany rejestrów, oraz diodę wskazującą kiedy pojawił się sygnał stop.
 Aby uruchomić maszynę po sygnale stop, należy wyłączyć zegar i przytrzymać przycisk RESET. Gdy dioda STOP zgaśnie, można ponownie uruchomić zegar i program zostanie wykonany od adresu 0.
+
 
 
